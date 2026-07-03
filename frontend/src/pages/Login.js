@@ -36,12 +36,12 @@ function Login() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-10 rounded shadow-md w-96">
+    <div className="h-screen flex items-center justify-center bg-blue-900">
+      <div className="bg-red-300 p-10 rounded shadow-md w-96">
 
         <h1 className="text-3xl font-bold mb-5">
           Login
-        </h1>
+        </h1> 
 
         <input
           type="email"
