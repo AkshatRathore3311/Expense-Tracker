@@ -7,14 +7,15 @@ const router = express.Router();
 // Add Transaction
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { text, amount, type } = req.body;
+    const { text, amount, category, type } = req.body;
 
     const transaction = new Transaction({
-      userId: req.user.id,
-      text,
-      amount,
-      type,
-    });
+  userId: req.user.id,
+  text,
+  amount,
+  category,
+  type,
+});
 
     await transaction.save();
 

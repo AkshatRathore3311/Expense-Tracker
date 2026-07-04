@@ -4,6 +4,7 @@ const transactionSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   text: {
     type: String,
@@ -12,6 +13,11 @@ const transactionSchema = new mongoose.Schema({
   amount: {
     type: Number,
     required: true,
+  },
+  category: {
+    type: String,
+    required: true,
+    enum: ["Food", "Travel", "Shopping"],
   },
   type: {
     type: String,
@@ -24,7 +30,4 @@ const transactionSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model(
-  "Transaction",
-  transactionSchema
-);
+module.exports = mongoose.model("Transaction", transactionSchema);

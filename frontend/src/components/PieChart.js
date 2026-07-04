@@ -1,4 +1,9 @@
-import {Chart as ChartJS,ArcElement,Tooltip,Legend} from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
 import { Pie } from "react-chartjs-2";
 
@@ -9,7 +14,6 @@ ChartJS.register(
 );
 
 function PieChart({ transactions }) {
-
   const food = transactions
     .filter((t) => t.category === "Food")
     .reduce((acc, curr) => acc + Number(curr.amount), 0);
@@ -23,40 +27,45 @@ function PieChart({ transactions }) {
     .reduce((acc, curr) => acc + Number(curr.amount), 0);
 
   const data = {
-
-    labels: [
-      "Food",
-      "Travel",
-      "Shopping"
-    ],
+    labels: ["Food", "Travel", "Shopping"],
 
     datasets: [
       {
-        data: [
-          food,
-          travel,
-          shopping
-        ],
-
+        label: "Expenses",
+        data: [food, travel, shopping],
         backgroundColor: [
           "#ef4444",
           "#3b82f6",
-          "#22c55e"
-        ]
-      }
-    ]
+          "#22c55e",
+        ],
+        borderWidth: 2,
+      },
+    ],
   };
 
   return (
-
-    <div className="bg-white p-5 rounded shadow mt-5">
-
+    <div className="bg-white p-5 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">
         Spending Breakdown
       </h2>
 
-      <Pie data={data} />
-
+      {food + travel + shopping === 0 ? (
+        <p className="text-gray-500">
+          No expense data available.
+        </p>
+      ) : (
+        <div className="flex justify-start">
+        <div className="w-64 h-64 ">
+  <Pie
+    data={data}
+    options={{
+      responsive: true,
+      maintainAspectRatio: false,
+    }}
+  />
+  </div>
+</div>
+      )}
     </div>
   );
 }

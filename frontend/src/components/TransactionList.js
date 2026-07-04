@@ -1,61 +1,52 @@
-function TransactionList({
-  transactions,
-  deleteTransaction
-}) {
-
+function TransactionList({ transactions, deleteTransaction }) {
   return (
-
     <div className="bg-white p-5 rounded shadow">
-
       <h2 className="text-2xl font-bold mb-4">
         Recent Transactions
       </h2>
 
-      {transactions.map((transaction, index) => (
+      {transactions.length === 0 ? (
+        <p className="text-gray-500">
+          No transactions found.
+        </p>
+      ) : (
+        transactions.map((transaction) => (
+          <div
+            key={transaction._id}
+            className="border p-3 rounded mb-3 flex justify-between items-center"
+          >
+            <div>
+              <h3 className="font-bold">
+                {transaction.text}
+              </h3>
 
-        <div
-          key={index}
-          className="border p-3 rounded mb-3 flex justify-between items-center"
-        >
+              <p className="text-gray-900">
+                {transaction.category}
+              </p>
+            </div>
 
-          <div>
+            <div className="flex items-center gap-4">
+              <p
+                className={
+                  transaction.type === "expense"
+                    ? "text-red-500 font-bold"
+                    : "text-green-500 font-bold"
+                }
+              >
+                {transaction.type === "expense" ? "-" : "+"}
+                ₹{transaction.amount}
+              </p>
 
-            <h3 className="font-bold">
-              {transaction.title}
-            </h3>
-
-            <p className="text-gray-500">
-              {transaction.category}
-            </p>
-
+              <button
+                onClick={() => deleteTransaction(transaction._id)}
+                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
           </div>
-
-          <div className="flex items-center gap-4">
-
-            <p
-              className={
-                transaction.type === "Expense"
-                ? "text-red-500 font-bold"
-                : "text-green-500 font-bold"
-              }
-            >
-              {transaction.type === "Expense" ? "-" : "+"}
-              ₹{transaction.amount}
-            </p>
-
-            <button
-              onClick={() => deleteTransaction(index)}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              Delete
-            </button>
-
-          </div>
-
-        </div>
-
-      ))}
-
+        ))
+      )}
     </div>
   );
 }

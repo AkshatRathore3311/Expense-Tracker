@@ -1,110 +1,101 @@
-import PieChart from "../components/PieChart";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import API from "../services/api";
 
 import Navbar from "../components/Navbar";
 import TransactionForm from "../components/TransactionForm";
 import TransactionList from "../components/TransactionList";
+import PieChart from "../components/PieChart";
 
 function Dashboard() {
-
   const [transactions, setTransactions] = useState([]);
 
-  const addTransaction = (transaction) => {
+  // Fetch all transactions
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
-    setTransactions([
-      ...transactions,
-      transaction
-    ]);
+  const fetchTransactions = async () => {
+    try {
+      const res = await API.get("/transactions");
+      setTransactions(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const deleteTransaction = (index) => {
+  // Add transaction
+  const addTransaction = async (transaction) => {
+    try {
+      const res = await API.post("/transactions", transaction);
 
-    const updated = transactions.filter(
-      (_, i) => i !== index
-    );
+      setTransactions((prev) => [...prev, res.data]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    setTransactions(updated);
+  // Delete transaction
+  const deleteTransaction = async (id) => {
+    try {
+      await API.delete(`/transactions/${id}`);
+
+      setTransactions((prev) =>
+        prev.filter((transaction) => transaction._id !== id)
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const income = transactions
-    .filter((t) => t.type === "Income")
+    .filter((t) => t.type === "income")
     .reduce((acc, curr) => acc + Number(curr.amount), 0);
 
   const expense = transactions
-    .filter((t) => t.type === "Expense")
+    .filter((t) => t.type === "expense")
     .reduce((acc, curr) => acc + Number(curr.amount), 0);
 
   const balance = income - expense;
 
   return (
-
-    <div className="bg-gray-100 min-h-screen">
-
+    <div className="bg-blue-900 min-h-screen">
       <Navbar />
 
       <div className="p-10">
-
-        <h1 className="text-4xl font-bold mb-6">
+        <h1 className="text-4xl font-bold mb-6 text-white">
           Expense Dashboard
         </h1>
 
         <div className="grid grid-cols-3 gap-5 mb-10">
-
-          <div className="bg-white p-5 rounded shadow">
-
-            <h2 className="text-gray-500">
-              Total Balance
-            </h2>
-
-            <p className="text-3xl font-bold mt-2">
-              ₹{balance}
-            </p>
-
+          <div className="bg-yellow-400 p-5 rounded shadow">
+            <h2 className="text-gray-800">Total Balance</h2>
+            <p className="text-4xl font-bold mt-2">₹{balance}</p>
           </div>
 
-          <div className="bg-white p-5 rounded shadow">
-
-            <h2 className="text-gray-500">
-              Total Income
-            </h2>
-
-            <p className="text-3xl font-bold text-green-600 mt-2">
-              ₹{income}
-            </p>
-
+          <div className="bg-green-400 p-5 rounded shadow">
+            <h2 className="text-gray-800">Total Income</h2>
+            <p className="text-3xl font-bold mt-2">₹{income}</p>
           </div>
 
-          <div className="bg-white p-5 rounded shadow">
-
-            <h2 className="text-gray-500">
-              Total Expense
-            </h2>
-
-            <p className="text-3xl font-bold text-red-600 mt-2">
-              ₹{expense}
-            </p>
-
+          <div className="bg-red-400 p-5 rounded shadow">
+            <h2 className="text-gray-800">Total Expense</h2>
+            <p className="text-3xl font-bold mt-2">₹{expense}</p>
           </div>
-
         </div>
 
         <div className="grid grid-cols-2 gap-5">
-
-          <TransactionForm
-            addTransaction={addTransaction}
-          />
+          <TransactionForm addTransaction={addTransaction} />
 
           <TransactionList
             transactions={transactions}
             deleteTransaction={deleteTransaction}
           />
-         <PieChart transactions={transactions} 
-         />
         </div>
 
+        <div className="mt-8">
+          <PieChart transactions={transactions} />
+        </div>
       </div>
-
     </div>
   );
 }
