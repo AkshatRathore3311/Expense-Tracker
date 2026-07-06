@@ -1,6 +1,6 @@
-function TransactionList({ transactions, deleteTransaction }) {
+function TransactionList({ transactions, deleteTransaction,editTransaction, }) {
   return (
-    <div className="bg-white p-5 rounded shadow">
+    <div className="bg-violet-400 p-5 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">
         Recent Transactions
       </h2>
@@ -37,12 +37,21 @@ function TransactionList({ transactions, deleteTransaction }) {
                 ₹{transaction.amount}
               </p>
 
-              <button
-                onClick={() => deleteTransaction(transaction._id)}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
+              <div className="flex gap-2">
+               <button
+                  onClick={() => editTransaction(transaction)}
+                  className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => deleteTransaction(transaction._id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                >
+                   Delete
+                </button>
+              </div>
             </div>
           </div>
         ))

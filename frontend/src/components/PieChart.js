@@ -44,7 +44,7 @@ function PieChart({ transactions }) {
   };
 
   return (
-    <div className="bg-white p-5 rounded shadow">
+    <div className="inline-block bg-pink-200 p-5 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">
         Spending Breakdown
       </h2>

@@ -8,7 +8,7 @@ import PieChart from "../components/PieChart";
 
 function Dashboard() {
   const [transactions, setTransactions] = useState([]);
-
+  const [editingTransaction, setEditingTransaction] = useState(null);
   // Fetch all transactions
   useEffect(() => {
     fetchTransactions();
@@ -46,7 +46,9 @@ function Dashboard() {
       console.log(error);
     }
   };
-
+  const editTransaction = (transaction) => {
+  setEditingTransaction(transaction);
+};
   const income = transactions
     .filter((t) => t.type === "income")
     .reduce((acc, curr) => acc + Number(curr.amount), 0);
@@ -84,12 +86,16 @@ function Dashboard() {
         </div>
 
         <div className="grid grid-cols-2 gap-5">
-          <TransactionForm addTransaction={addTransaction} />
+         <TransactionForm
+  addTransaction={addTransaction}
+  editingTransaction={editingTransaction}
+/>
 
           <TransactionList
-            transactions={transactions}
-            deleteTransaction={deleteTransaction}
-          />
+  transactions={transactions}
+  deleteTransaction={deleteTransaction}
+  editTransaction={editTransaction}
+/>
         </div>
 
         <div className="mt-8">

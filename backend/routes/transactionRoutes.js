@@ -10,16 +10,51 @@ router.post("/", authMiddleware, async (req, res) => {
     const { text, amount, category, type } = req.body;
 
     const transaction = new Transaction({
-  userId: req.user.id,
-  text,
-  amount,
-  category,
-  type,
-});
+      userId: req.user.id,
+      text,
+      amount,
+      category,
+      type,
+    });
 
     await transaction.save();
 
     res.status(201).json(transaction);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+});
+
+// Update Transaction
+router.put("/:id", authMiddleware, async (req, res) => {
+  try {
+    const { text, amount, category, type } = req.body;
+
+    const transaction = await Transaction.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.user.id,
+      },
+      {
+        text,
+        amount,
+        category,
+        type,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!transaction) {
+      return res.status(404).json({
+        message: "Transaction not found",
+      });
+    }
+
+    res.json(transaction);
   } catch (error) {
     res.status(500).json({
       message: "Server Error",

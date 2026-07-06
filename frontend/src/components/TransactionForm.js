@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function TransactionForm({ addTransaction }) {
+
+function TransactionForm({ addTransaction, editingTransaction, }) {
   const [text, setText] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [type, setType] = useState("expense");
+  useEffect(() => {
+  if (editingTransaction) {
+    setText(editingTransaction.text);
+    setAmount(editingTransaction.amount);
+    setCategory(editingTransaction.category);
+    setType(editingTransaction.type);
+  }
+}, [editingTransaction]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,10 +47,8 @@ function TransactionForm({ addTransaction }) {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Transaction Name"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="border w-full p-2 mb-3 rounded"
+          placeholder="Transaction Name"value={text} onChange={(e) => setText(e.target.value)}
+          className="border  bg-teal-300 w-full p-2 mb-3 rounded"
         />
 
         <input
