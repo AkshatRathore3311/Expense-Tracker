@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -65,7 +66,15 @@ function Login() {
         >
           Login
         </button>
-
+         <p className="text-center mt-4 text-gray-700">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-700 font-semibold hover:underline"
+          >
+            Register Here
+          </Link>
+        </p>
       </div>
     </div>
   );

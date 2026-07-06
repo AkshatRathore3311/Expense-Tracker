@@ -1,32 +1,48 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleRegister = async () => {
+    // Validation
+    if (!name || !email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      await axios.post(
+  "http://localhost:5000/api/auth/register",
+  {
+    name,
+    email,
+    password,
+  }
+);
 
       alert("Registration Successful");
-      console.log(res.data);
-    } catch (error) {
-  console.log(error.response);
-  console.log(error.response?.data);
 
-  alert(
-    error.response?.data?.message || "Registration Failed"
-  );
-}
+      // Clear form
+      setName("");
+      setEmail("");
+      setPassword("");
+
+      // Redirect to Login page
+      navigate("/login");
+    } catch (error) {
+      console.log(error.response);
+      console.log(error.response?.data);
+
+      alert(
+        error.response?.data?.message || "Registration Failed"
+      );
+    }
   };
 
   return (
@@ -62,7 +78,7 @@ function Register() {
 
         <button
           onClick={handleRegister}
-          className="bg-black text-white w-full p-2 rounded"
+          className="bg-black text-white w-full p-2 rounded hover:bg-gray-800"
         >
           Register
         </button>
@@ -71,4 +87,4 @@ function Register() {
   );
 }
 
-export default Register;  
+export default Register;
